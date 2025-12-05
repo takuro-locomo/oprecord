@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Node/Frontend
+node_modules/
+dist/
+.DS_Store
+
+# Google Credentials
+credentials.json
+backend/credentials.json
+backend/.env
+
+# Logs
+*.log
+backend_debug.log
+backend_error.log
+
+# Uploads
+uploads/
+backend/uploads/
