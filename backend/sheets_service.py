@@ -2,6 +2,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import os
 from dotenv import load_dotenv
+from chart_service import update_dashboard_data
 
 load_dotenv()
 
@@ -28,13 +29,10 @@ def save_to_sheet(data):
         sheet = client.open_by_key(spreadsheet_id).sheet1
         
         # 1. Determine the next row index based on Column E (ID) which should always be present
-        # col_values returns a list of values in the column. The length tells us the last filled row.
-        # We assume headers exist, so at least 1 row.
         existing_ids = sheet.col_values(5) # Column E is index 5 (1-based)
         next_row_index = len(existing_ids) + 1
         
         # 2. Auto-calculate 'total number' (Column D) and 'anual number' (Column C)
-        # Get the last value from Column D and C
         existing_totals = sheet.col_values(4) # Column D is index 4
         existing_anuals = sheet.col_values(3) # Column C is index 3
         
@@ -62,29 +60,6 @@ def save_to_sheet(data):
             next_anual_number = last_anual + 1
             
         # 3. Construct the row data
-        # Mapping based on provided screenshot:
-        # A: (Empty)
-        # B: comment
-        # C: anual number (Auto-inc)
-        # D: total number (Auto-inc)
-        # E: id
-        # F: date
-        # G: name (Empty)
-        # H: sex (M1, F2)
-        # I: primary (Default 1 based on screenshot)
-        # J: age
-        # K: r1lt2 (Side)
-        # L: OA1,ON... (Diagnosis)
-        # M: cementless (Cement)
-        # N: stem
-        # O: mdm
-        # P: cup
-        # Q: screw
-        # R: head
-        # S: (Empty)
-        # T: time
-        # U: bleeding
-        
         row_values = [
             "",                      # A
             data.get("comment", ""), # B
@@ -110,11 +85,14 @@ def save_to_sheet(data):
         ]
         
         # 4. Write to the specific range
-        # Convert range to A1 notation, e.g., "A202:U202"
         range_name = f"A{next_row_index}:U{next_row_index}"
         
         print(f"Writing to range {range_name}: {row_values}")
         sheet.update(range_name=range_name, values=[row_values])
+        
+        # 5. Update Dashboard Data (Chart Source)
+        print("Updating dashboard data...")
+        update_dashboard_data(client, spreadsheet_id)
         
         return True
     except Exception as e:
