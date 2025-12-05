@@ -47,7 +47,7 @@ def scan_op_log(image_path):
     - side: 1 for Right, 2 for Left (Look for "右", "左", "R", "L", "ひだり"->2, "みぎ"->1)
     - diagnosis: 1 for OA (Osteoarthritis), check for "OA", "変形性股関節症". If unsure or other, leave null or best guess.
     - cement: Default to 1 (Cementless). ONLY if "Cemented" or "Cement" is explicitly written, set to 0.
-    - stem: Must be one of: "universia std", "universia HO", "avenir avara", "avenir std", "avenir HO", "polar", "CMK", "heritage". Best match.
+    - stem: Must be one of: "universia std", "universia HO", "avenir vara", "avenir std", "avenir HO", "polar", "CMK", "heritage". Best match.
     - mdm: Default to 0. Set to 1 ONLY if "DM" is explicitly written.
     - cup: Cup size (number)
     - screw: Total count of screws. Example: "20*1 25*2" means 1+2=3 screws. Return 3. Max value is single digit.
